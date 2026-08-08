@@ -18,7 +18,8 @@ st.set_page_config(
 df = pd.read_csv("Obesity.csv")
 
 df["BMI"] = df["Weight"] / (df["Height"] ** 2)
-# modelo = joblib.load("modelo_obesidade.pkl")
+modelo = joblib.load("modelo_obesidade.pkl")
+
 # ==========================
 # MENU LATERAL
 # ==========================
@@ -200,10 +201,28 @@ elif pagina == "🤖 Predição":
 
     if st.button("Realizar Predição"):
 
-        st.success(
-            f"IMC calculado: {round(bmi,2)}"
-        )
+        entrada = pd.DataFrame({
+            'Gender': [gender],
+            'Age': [age],
+            'Height': [height],
+            'Weight': [weight],
+            'family_history': [family_history],
+            'FAVC': [favc],
+            'FCVC': [2.0],
+            'NCP': [3.0],
+            'CAEC': ['Sometimes'],
+            'SMOKE': ['no'],
+            'CH2O': [ch2o],
+            'SCC': ['no'],
+            'FAF': [faf],
+            'TUE': [1.0],
+            'CALC': [calc],
+            'MTRANS': ['Public_Transportation'],
+            'BMI': [bmi]
+        })
 
-        st.info(
-            "Conexão com modelo será realizada após ajuste de compatibilidade do scikit-learn."
+        resultado = modelo.predict(entrada)
+
+        st.success(
+            f"Nível previsto: {resultado[0]}"
         )
